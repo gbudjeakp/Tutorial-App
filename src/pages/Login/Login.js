@@ -53,7 +53,7 @@ function Login() {
               Submit
             </button>
           </form>
-          <a href="#">Don't have an account? SignUp</a>
+          {/* <a href="#">Don't have an account? SignUp</a> */}
         </div>
       </div>
     )

@@ -70,7 +70,7 @@ function Signup() {
               Submit
             </button>
           </form>
-          <a href="#">Have an account already? Login</a>
+          {/* <a href="#">Have an account already? Login</a> */}
         </div>
       </div>
         </div>
