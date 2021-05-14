@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors")
 const port = 5000
 const app = express()
+const db = require("./Config/connection")
 const userRoutes = require("./Routes/User")
 
 
@@ -11,10 +12,20 @@ app.use(express.json())
 
 app.use('/users', userRoutes)
 
+app.get("/createdb", (req, res) => {
+    let sql = 'CREATE DATABASE nodemysql';
+    db.query(sql, (err, result)=>{
+        if(err){
+        console.log(err)
+        } else{
+            res.send('Database created')
+            console.log(result)
+        }    
+    })
+})
+  
 
-
-//Database setup done here
-
+  
 
 app.listen(port, ()=>{
     console.log(`server is running on port ${port}`)
