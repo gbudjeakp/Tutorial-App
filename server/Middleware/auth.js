@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
 
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await  "Add stuff"
+    const user = await  db.query('SELECT')
 
     if (!user) throw new Error('Unauthenticated');
 

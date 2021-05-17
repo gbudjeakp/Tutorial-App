@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const db = require("../Config/connection");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 // const cookie = require("cookie");
 const bcrypt = require("bcrypt");
 
@@ -30,20 +30,53 @@ router.route("/register").post(async (req, res) => {
       }
     });
   } catch (err) {
-   console.error(err)
+    console.error(err);
   }
 });
 
 //This route handles log-in validation
-router.route("/login").post((req, res) => {
-  const { email, password } = req.body;
-  console.log(`Here is your passowrd ${password} and your email ${email}`);
+router.route("/login").post(async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please Enter Email and Password" });
+    } else {
+      const userInDatabase = "SELECT * FROM users WHERE email = ?";
+      db.query(userInDatabase, [email], (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          //Creating the Token for Logged In User
+          const user = result[0].id;
+          const token = jwt.sign({ user: user }, "secretkeyforjwt", {
+            expiresIn: "20d",
+          });
+          
+          //Comparing hashpassword to password enterd
+          bcrypt.compare(password, result[0].password)
+          res.status(200).json({ message: "User Logged In" });
+          console.log(result);
+        }
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: "Error Somewhere" });
+  }
 });
 
 //This route send all the users to the front-end
 router.route("/allusers").get((req, res) => {
-  console.log("Here are all the users");
   const allUsers = "SELECT * FROM  users ;";
+  db.query(allUsers, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result[0].name);
+    }
+  });
+  return res.status(200).json();
 });
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors")
 const port = 5000
 const app = express()
+const cookieParser = require("cookie-parser")
 const db = require("./Config/connection")
 const userRoutes = require("./Routes/User")
 
@@ -9,6 +10,7 @@ const userRoutes = require("./Routes/User")
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(cookieParser());
 
 app.use('/users', userRoutes)
 
